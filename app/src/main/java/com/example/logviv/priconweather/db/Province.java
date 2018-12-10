@@ -7,7 +7,7 @@ import org.litepal.crud.DataSupport;
  * 省
  */
 
-public class Province {
+public class Province extends DataSupport{
     private int id;   //各个省在数据表中的id
     private String provinceName;  //省名
     private int provinceCode;   //各个省的代号

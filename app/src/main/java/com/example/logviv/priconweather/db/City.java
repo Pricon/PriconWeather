@@ -1,11 +1,13 @@
 package com.example.logviv.priconweather.db;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by logviv on 2018/12/2.
  * 市
  */
 
-public class City {
+public class City extends DataSupport {
     private int id;   //数据表中的id
     private String cityName;   //城市名
     private int cityCode;      //城市代码

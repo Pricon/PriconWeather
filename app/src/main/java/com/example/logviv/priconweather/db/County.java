@@ -1,11 +1,13 @@
 package com.example.logviv.priconweather.db;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by logviv on 2018/12/2.
  * 县
  */
 
-public class County {
+public class County extends DataSupport {
     private int id;    //数据表中的id
     private String countyName;   //县名
     private int cityId;        //所属市的id
