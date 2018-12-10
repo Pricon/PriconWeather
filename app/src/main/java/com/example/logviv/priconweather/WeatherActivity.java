@@ -1,5 +1,6 @@
 package com.example.logviv.priconweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.logviv.priconweather.gson.Forecast;
 import com.example.logviv.priconweather.gson.Weather;
+import com.example.logviv.priconweather.service.AutoUpdateService;
 import com.example.logviv.priconweather.util.HttpUtil;
 import com.example.logviv.priconweather.util.Utility;
 import java.io.IOException;
@@ -184,6 +186,9 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        //每3小时自动更新天气
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     /**
