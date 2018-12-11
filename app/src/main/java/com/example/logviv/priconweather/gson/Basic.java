@@ -2,13 +2,15 @@ package com.example.logviv.priconweather.gson;
 
 import com.google.gson.annotations.SerializedName;
 
-
+/**
+ * 基本信息
+ */
 public class Basic {
     @SerializedName("city")
-    public String cityName;
+    public String cityName;  //城市名
 
     @SerializedName("id")
-    public String weatherId;
+    public String weatherId;  //天气id
 
     public Update update;
 

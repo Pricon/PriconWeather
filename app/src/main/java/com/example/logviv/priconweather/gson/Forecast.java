@@ -3,7 +3,7 @@ package com.example.logviv.priconweather.gson;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by logviv on 2018/12/10.
+ * 未来几天的天气信息
  */
 
 public class Forecast {
