@@ -7,20 +7,15 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.example.logviv.priconweather.gson.Forecast;
 import com.example.logviv.priconweather.gson.Weather;
 import com.example.logviv.priconweather.service.AutoUpdateService;
@@ -39,12 +34,16 @@ public class WeatherActivity extends Activity {
     private TextView degreeText;  //显示温度
     private TextView weatherInfoText;  //天气信息
     private LinearLayout forecastLayout;  //未来几天天气的信息布局
+    private TextView qualityText; //空气质量，取值范围：优、良轻度污染等等
+    private TextView mainText; //主要污染物
     private TextView aqiText;  //显示空气质量信息
-    private TextView pm25Text;
+    private TextView pm10Text; //pm10指数
+    private TextView pm25Text; //pm2.5指数
+    private TextView no2Text; //二氧化氮
+    private TextView so2Text; //二氧化硫
     private TextView comfortText;  //舒适度信息
     private TextView carWashText;  //洗车信息
     private TextView sportText;   //运动信息
-    private ImageView bingPicImg;  //背景图
     public SwipeRefreshLayout swipeRefresh;  //下拉刷新
     private String mWeatherId;
     public DrawerLayout drawerLayout;
@@ -67,25 +66,22 @@ public class WeatherActivity extends Activity {
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
+        qualityText = (TextView) findViewById(R.id.quality);
+//        mainText = (TextView) findViewById(R.id.main_text);
         aqiText = (TextView) findViewById(R.id.aqi_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
+//        pm10Text = (TextView) findViewById(R.id.pm10_text);
+//        no2Text = (TextView) findViewById(R.id.no2_text);
+//        so2Text = (TextView) findViewById(R.id.so2_text);
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
-        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
         setting=(Button)findViewById(R.id.setting_button);
-        //加载背景图
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String bingPic = prefs.getString("bing_pic", null);
-        if (bingPic != null) {
-            Glide.with(this).load(bingPic).into(bingPicImg);
-        } else {
-            loadBingPic();
-        }
         String weatherString = prefs.getString("weather", null);
         if (weatherString != null) {
             //有缓存时直接解析天气数据
@@ -110,7 +106,8 @@ public class WeatherActivity extends Activity {
         navButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
+                //drawerLayout.openDrawer(GravityCompat.START);
+                startActivity(new Intent(WeatherActivity.this,ChangeAreaActivity.class));
             }
         });
         //跳转到关于界面
@@ -120,6 +117,7 @@ public class WeatherActivity extends Activity {
                 startActivity(new Intent(WeatherActivity.this,SettingActivity.class));
             }
         });
+
     }
 
     /**
@@ -162,7 +160,7 @@ public class WeatherActivity extends Activity {
                 });
             }
         });
-        loadBingPic();
+        //loadBingPic();
     }
 
     /**
@@ -193,8 +191,13 @@ public class WeatherActivity extends Activity {
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.city.aqi);
-            pm25Text.setText(weather.aqi.city.pm25);
+            qualityText.setText(weather.aqi.city.qlty);
+            aqiText.setText("AQI指数："+weather.aqi.city.aqi);
+            pm25Text.setText("pm2.5指数："+weather.aqi.city.pm25);
+//            mainText.setText(weather.aqi.city.main);
+//            pm10Text.setText(weather.aqi.city.pm10);
+//            no2Text.setText(weather.aqi.city.no2);
+//            so2Text.setText(weather.aqi.city.so2);
         }
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
@@ -208,30 +211,4 @@ public class WeatherActivity extends Activity {
         startService(intent);
     }
 
-    /**
-     * 加载每日一图（必应网站的每日背景图）
-     */
-    private void loadBingPic() {
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response)
-                    throws IOException {
-                final String bingPic = response.body().string();
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
-                editor.putString("bing_pic", bingPic);
-                editor.apply();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
-                    }
-                });
-            }
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 }

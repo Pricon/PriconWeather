@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:id="@+id/title_item">
 
         <Button
             android:id="@+id/back_button"
@@ -27,10 +29,34 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/back_button" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape"
+        android:id="@+id/relative_layout">
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/add_city"
+            android:background="@drawable/ic_add"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加城市"
+            android:textColor="#fff"
+            android:layout_below="@+id/add_city"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listview">
+        android:layout_height="wrap_content"
+        android:id="@+id/listview"
+        android:layout_below="@+id/title_item">
 
     </ListView>
-</LinearLayout>
+
+</RelativeLayout>

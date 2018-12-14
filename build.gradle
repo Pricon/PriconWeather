@@ -22,3 +22,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}

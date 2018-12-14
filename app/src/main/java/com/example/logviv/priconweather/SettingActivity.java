@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView about;
-    private Button ic_rigth;
+    private Button ic_right;
     private Button back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +21,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.setting);
 
         about = (TextView) findViewById(R.id.about);
-        ic_rigth=(Button)findViewById(R.id.right);
+        ic_right=(Button)findViewById(R.id.right);
         back = (Button) findViewById(R.id.back_button);
-        //about.getBackground().setAlpha(12);
         about.setOnClickListener(this);
         back.setOnClickListener(this);
+        ic_right.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (v==about||v==ic_rigth){
+        if (v==about||v==ic_right){
             startActivity(new Intent(SettingActivity.this,AboutActivity.class));
         }
         else if (v==back){

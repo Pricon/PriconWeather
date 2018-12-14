@@ -18,6 +18,7 @@ import com.example.logviv.priconweather.util.HttpUtil;
 import com.example.logviv.priconweather.util.Utility;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getString("weather", null) != null) {
             Intent intent = new Intent(this, WeatherActivity.class);
+            Intent intent1=new Intent(this,ChangeAreaActivity.class);
             startActivity(intent);
+
             finish();
         }
     }
