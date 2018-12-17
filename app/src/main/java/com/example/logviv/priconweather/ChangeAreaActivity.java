@@ -67,8 +67,12 @@ public class ChangeAreaActivity extends Activity implements View.OnClickListener
         String weatherString = prefs.getString("weather", null);
         Weather weather = Utility.handleWeatherResponse(weatherString);
         String cityName=weather.basic.cityName;
+        String temperature=weather.now.temperature;
+        String weatherInfo=weather.now.more.info;
         if (cityName!=null) { //将数据显示在界面上
             dataList.add(cityName);
+            dataList.add(temperature);
+            dataList.add(weatherInfo);
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
         }

@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, WeatherActivity.class);
             Intent intent1=new Intent(this,ChangeAreaActivity.class);
             startActivity(intent);
-
             finish();
         }
     }

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,20 +34,26 @@ public class WeatherActivity extends Activity {
     private TextView weatherInfoText;  //天气信息
     private LinearLayout forecastLayout;  //未来几天天气的信息布局
     private TextView qualityText; //空气质量，取值范围：优、良轻度污染等等
-    private TextView mainText; //主要污染物
     private TextView aqiText;  //显示空气质量信息
-    private TextView pm10Text; //pm10指数
     private TextView pm25Text; //pm2.5指数
-    private TextView no2Text; //二氧化氮
-    private TextView so2Text; //二氧化硫
+    private TextView brfText; //舒适度
+    private TextView humText; //相对湿度
+    private TextView flText; //体感温度
+    private TextView pressText; //大气压强
+    private TextView wind_dir; //风向
+    private TextView wind_sc;  //风力
+    private TextView wind_spd; //风速
     private TextView comfortText;  //舒适度信息
     private TextView carWashText;  //洗车信息
     private TextView sportText;   //运动信息
     public SwipeRefreshLayout swipeRefresh;  //下拉刷新
     private String mWeatherId;
-    public DrawerLayout drawerLayout;
     private Button navButton;  //选择地区
     private Button setting;
+
+    public WeatherActivity() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,18 +72,20 @@ public class WeatherActivity extends Activity {
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
         qualityText = (TextView) findViewById(R.id.quality);
-//        mainText = (TextView) findViewById(R.id.main_text);
         aqiText = (TextView) findViewById(R.id.aqi_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
-//        pm10Text = (TextView) findViewById(R.id.pm10_text);
-//        no2Text = (TextView) findViewById(R.id.no2_text);
-//        so2Text = (TextView) findViewById(R.id.so2_text);
+        brfText=(TextView)findViewById(R.id.brf);
+        humText=(TextView)findViewById(R.id.hum);
+        flText=(TextView)findViewById(R.id.fl);
+        pressText=(TextView)findViewById(R.id.press);
+        wind_dir=(TextView)findViewById(R.id.wind_direction);
+        wind_sc=(TextView)findViewById(R.id.wind_power);
+        wind_spd=(TextView)findViewById(R.id.wind_speed);
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
         setting=(Button)findViewById(R.id.setting_button);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -106,7 +113,6 @@ public class WeatherActivity extends Activity {
         navButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //drawerLayout.openDrawer(GravityCompat.START);
                 startActivity(new Intent(WeatherActivity.this,ChangeAreaActivity.class));
             }
         });
@@ -190,15 +196,20 @@ public class WeatherActivity extends Activity {
             minText.setText("/"+forecast.temperature.min+"℃");
             forecastLayout.addView(view);
         }
-        if (weather.aqi != null) {
-            qualityText.setText(weather.aqi.city.qlty);
-            aqiText.setText("AQI指数："+weather.aqi.city.aqi);
-            pm25Text.setText("pm2.5指数："+weather.aqi.city.pm25);
-//            mainText.setText(weather.aqi.city.main);
-//            pm10Text.setText(weather.aqi.city.pm10);
-//            no2Text.setText(weather.aqi.city.no2);
-//            so2Text.setText(weather.aqi.city.so2);
-        }
+        //空气质量
+        qualityText.setText(weather.aqi.city.qlty);
+        aqiText.setText("AQI指数："+weather.aqi.city.aqi);
+        pm25Text.setText("pm2.5指数："+weather.aqi.city.pm25);
+        //舒适度
+        brfText.setText(weather.suggestion.comfort.comText);
+        humText.setText("相对湿度："+weather.now.hum);
+        flText.setText("体感温度："+weather.now.fl);
+        pressText.setText("大气压强："+weather.now.press);
+        //风力风向
+        wind_dir.setText(weather.now.wind_dir);
+        wind_sc.setText("风力："+weather.now.wind_sc);
+        wind_spd.setText("风速："+weather.now.wind_spd);
+        //生活建议
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
         String sport = "运动建议：" + weather.suggestion.sport.info;

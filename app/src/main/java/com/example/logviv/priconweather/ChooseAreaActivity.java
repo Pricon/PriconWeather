@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.logviv.priconweather.R;
 import com.example.logviv.priconweather.db.City;
 import com.example.logviv.priconweather.db.County;
+import com.example.logviv.priconweather.db.County_Addition;
 import com.example.logviv.priconweather.db.Province;
 import com.example.logviv.priconweather.util.HttpUtil;
 import com.example.logviv.priconweather.util.Utility;
@@ -36,7 +38,7 @@ import okhttp3.Response;
  * 用于遍历省市县数据的碎片
  */
 
-public class ChooseAreaFragment extends Fragment {
+public class ChooseAreaActivity extends Fragment {
     public static final int LEVEL_PROVINCE = 0; //省
     public static final int LEVEL_CITY = 1;  //市
     public static final int LEVEL_COUNTY = 2;  //县
@@ -58,6 +60,10 @@ public class ChooseAreaFragment extends Fragment {
     private City selectedCity;
     //当前选中的级别
     private int currentLevel;
+    private int number=0;
+    private County_Addition county_addition;
+    private Boolean flag=false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,18 +94,19 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) { //为县
                     String weatherId = countyList.get(position).getWeatherId();
-                    if (getActivity() instanceof MainActivity) {  //判断一个对象是否属于MainActivity的实例
+                    if (getActivity() instanceof MainActivity ) {  //判断一个对象是否属于MainActivity的实例
                         //传递数据
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
                         startActivity(intent);
                         getActivity().finish();
-                    } else if (getActivity() instanceof WeatherActivity) {
-                        WeatherActivity activity = (WeatherActivity) getActivity();
-                        activity.drawerLayout.closeDrawers();
-                        activity.swipeRefresh.setRefreshing(true);
-                        activity.requestWeather(weatherId);
                     }
+//                    else if (getActivity() instanceof WeatherActivity ) {
+//                        WeatherActivity activity = (WeatherActivity) getActivity();
+//                       // AddAreaActivity activity=(AddAreaActivity)getActivity();
+//                        activity.swipeRefresh.setRefreshing(true);
+//                        activity.requestWeather(weatherId);
+//                    }
                 }
             }
         });
